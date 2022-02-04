@@ -1,77 +1,38 @@
 import dash
-
-from dash.dependencies import Input, Output, State
 from dash import dcc, html
-from dash.exceptions import PreventUpdate
-import random
-
+from dash.dependencies import Input, Output
+import plotly.express as px
+import pandas as pd
 
 from app import app
 
+df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminderDataFiveYear.csv')
+
 layout = html.Div([
-    # The memory store reverts to the default on every page refresh
-    #dcc.Store(id='memory'),
-    # The local store will take the initial data
-    # only the first time the page is loaded
-    # and keep it until it is cleared.
-    dcc.Store(id='local', storage_type='local'),
-    # Same as the local store but will lose the data
-    # when the browser/tab closes.
-    #dcc.Store(id='session', storage_type='session'),
-    html.Table([
-        html.Thead([
-            html.Tr(html.Th('Click to store in:', colSpan="3")),
-            html.Tr([
-                #html.Th(html.Button('memory', id='memory-button')),
-                html.Th(html.Button('localStorage', id='local-button')),
-                #html.Th(html.Button('sessionStorage', id='session-button'))
-            ]),
-            html.Tr([
-                #html.Th('Memory clicks'),
-                html.Th('Local clicks'),
-                #html.Th('Session clicks')
-            ])
-        ]),
-        html.Tbody([
-            html.Tr([
-                #html.Td(0, id='memory-clicks'),
-                html.Td(0, id='local-clicks'),
-                #html.Td(0, id='session-clicks')
-            ])
-        ])
-    ])
+    dcc.Graph(id='graph-with-slider'),
+    dcc.Slider(
+        id='year-slider',
+        min=df['year'].min(),
+        max=df['year'].max(),
+        value=df['year'].min(),
+        marks={str(year): str(year) for year in df['year'].unique()},
+        step=None
+    )
 ])
 
-store = 'local'
 
-# @app.callback(Output('local', 'data'),
-#                 Input('local-button', 'n_clicks'),
-#                 State('local', 'data'))
-# def on_click(n_clicks, data):
-#     if n_clicks is None:        
-#         raise PreventUpdate
-#     # Give a default data dict with 0 clicks if there's no data.
-#     #data = data or {'clicks': 0}
-#     print("this puts data in local storage")
-#     #data['clicks'] = data['clicks'] + 1
-#     data = {"random_x":10,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}
-#     return data
+@app.callback(
+    Output('graph-with-slider', 'figure'),
+    Input('year-slider', 'value'))
+def update_figure(selected_year):
+    filtered_df = df[df.year == selected_year]
 
-# output the stored clicks in the table cell.
-@app.callback(Output('local-clicks', 'children'),                
-                Input('local', 'modified_timestamp'),
-                State('local', 'data'))
-def on_data(ts, data):
-    #print(ts, data)
-    #print({"random_x":15,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])})
-    # if ts is None:
-    #     raise PreventUpdate
+    fig = px.scatter(filtered_df, x="gdpPercap", y="lifeExp",
+                     size="pop", color="continent", hover_name="country",
+                     log_x=True, size_max=55)
 
-    data = data or {}
-    #print(data)
+    fig.update_layout(transition_duration=500)
 
-    #return data.get('random_x', 0)
-    return "" if data.get('random_x', 0) == None else f"The all-important value driving our business decisions is {data.get('random_x', 0)+5}"
-
+    return fig
 
 

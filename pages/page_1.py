@@ -1,7 +1,6 @@
 import dash
 from dash.dependencies import Input, Output, State
 from dash import dcc, html, dash_table
-from dash import html
 import random
 import plotly.express as px
 import pandas as pd
@@ -64,10 +63,14 @@ def add_row(n_clicks, rows, value):
     [State('input-on-submit', 'value'),
     State('local', 'data')])
 def update_output(n_clicks, value, data):
-    if n_clicks > 0:
-        return "" if value == None else f"The all-important value driving our business decisions is {value+5}"
-    else:
-        return f"From previous input {data['random_x']}, the all-important value driving our business decisions is {data['random_x']+5}"
+    try:
+        if n_clicks > 0:
+            return "" if value == None else f"The all-important value driving our business decisions is {value+5}"
+        else:
+            return f"From previous input {data['random_x']}, the all-important value driving our business decisions is {data['random_x']+5}"
+    except TypeError:
+        return 'Enter a value and press submit'
+
 @app.callback(
     Output('adding-rows-graph', 'figure'),
     Input('adding-rows-table', 'data'))
@@ -87,13 +90,7 @@ def display_output(rows):
     [State('local', 'data'),
     State('input-on-submit', 'value')])
 def on_click(n_clicks, data, value):
-    print(value)
     if n_clicks is None:        
-        raise PreventUpdate
-    # Give a default data dict with 0 clicks if there's no data.
-    #data = data or {'clicks': 0}
-    print("this puts data in local storage")
-    #data['clicks'] = data['clicks'] + 1
-    data = {"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}
-    print(data)
-    return data
+        raise PreventUpdate    
+    
+    return {"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}

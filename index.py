@@ -52,22 +52,6 @@ content = html.Div(id="page-content", style=CONTENT_STYLE)
 
 app.layout = html.Div([dcc.Location(id="url"), sidebar, content])
 
-### Page container ###
-# page_container = html.Div(
-#     children=[
-#         # represents the URL bar, doesn't render anything
-#         dcc.Location(
-#             id='url',
-#             refresh=False,
-#         ),
-#         # content will be rendered in this element
-#         html.Div(id='page-content')
-#     ]
-# )
-
-### Set app layout to page container ###
-# app.layout = page_container
-
 @app.callback(dash.dependencies.Output('page-content', 'children'),
               [dash.dependencies.Input('url', 'pathname')])
 

@@ -14,6 +14,7 @@ markdown_text = '''
 # Dash Data Visualisation
 # '''
 
+### Dummy Dataframe for Data Viz
 random_x = [random.randint(1,1000) for i in range(20)]
 random_y = [i for i in range(1,21)]
 size = [random.randint(1,50) for i in range(20)]
@@ -60,14 +61,12 @@ def add_row(n_clicks, rows, value):
     State('input-on-submit', 'value'))
 def update_output(n_clicks, value):
     if n_clicks > 0:
-    #print(value)
-    #rows.append({"random_x":random.randint(1,100),"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}) 
+    #print(value) 
         return "" if value == None else f"The all-important value driving our business decisions is {value+5}"
 
 @app.callback(
     Output('adding-rows-graph', 'figure'),
     Input('adding-rows-table', 'data'))
-    # Input('adding-rows-table', 'columns'))
 def display_output(rows):   
     fig = px.scatter(rows, 
         x="random_x", 

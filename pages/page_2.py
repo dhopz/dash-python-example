@@ -44,18 +44,18 @@ layout = html.Div([
 
 store = 'local'
 
-@app.callback(Output('local', 'data'),
-                Input('local-button', 'n_clicks'),
-                State('local', 'data'))
-def on_click(n_clicks, data):
-    if n_clicks is None:        
-        raise PreventUpdate
-    # Give a default data dict with 0 clicks if there's no data.
-    #data = data or {'clicks': 0}
-
-    #data['clicks'] = data['clicks'] + 1
-    data = {"random_x":random.randint(1,21),"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}
-    return data
+# @app.callback(Output('local', 'data'),
+#                 Input('local-button', 'n_clicks'),
+#                 State('local', 'data'))
+# def on_click(n_clicks, data):
+#     if n_clicks is None:        
+#         raise PreventUpdate
+#     # Give a default data dict with 0 clicks if there's no data.
+#     #data = data or {'clicks': 0}
+#     print("this puts data in local storage")
+#     #data['clicks'] = data['clicks'] + 1
+#     data = {"random_x":10,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}
+#     return data
 
 # output the stored clicks in the table cell.
 @app.callback(Output('local-clicks', 'children'),                

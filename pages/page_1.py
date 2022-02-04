@@ -52,12 +52,9 @@ layout = html.Div([
     [State('adding-rows-table', 'data'),
     State('input-on-submit', 'value')])
     #State('local', 'data')])
-def add_row(n_clicks, rows, value):  
-    #print(data, "this is the row")
-    #print(value)
-    
+def add_row(n_clicks, rows, value): 
+    #print(data, "local storage")   
     if n_clicks > 0:
-        #print({"random_x":value,"random_y":random.randint(1,100),"size":random.randint(1,100),"color":"w"})
         rows.append({"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])})
     return rows
 
@@ -84,3 +81,19 @@ def display_output(rows):
 
     return fig
 
+@app.callback(
+    Output('local', 'data'),
+    Input('editing-rows-button', 'n_clicks'),
+    [State('local', 'data'),
+    State('input-on-submit', 'value')])
+def on_click(n_clicks, data, value):
+    print(value)
+    if n_clicks is None:        
+        raise PreventUpdate
+    # Give a default data dict with 0 clicks if there's no data.
+    #data = data or {'clicks': 0}
+    print("this puts data in local storage")
+    #data['clicks'] = data['clicks'] + 1
+    data = {"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}
+    print(data)
+    return data

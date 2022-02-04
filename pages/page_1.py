@@ -45,12 +45,17 @@ layout = html.Div([
     dcc.Graph(id='adding-rows-graph')
 ])
 
+
 @app.callback(
     Output('adding-rows-table', 'data'),
     Input('editing-rows-button', 'n_clicks'),  
     [State('adding-rows-table', 'data'),
     State('input-on-submit', 'value')])
-def add_row(n_clicks, rows, value):    
+    #State('local', 'data')])
+def add_row(n_clicks, rows, value):  
+    #print(data, "this is the row")
+    #print(value)
+    
     if n_clicks > 0:
         #print({"random_x":value,"random_y":random.randint(1,100),"size":random.randint(1,100),"color":"w"})
         rows.append({"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])})
@@ -59,12 +64,13 @@ def add_row(n_clicks, rows, value):
 @app.callback(
     Output('container-button-basic', 'children'),
     Input('editing-rows-button', 'n_clicks'),
-    State('input-on-submit', 'value'))
-def update_output(n_clicks, value):
+    [State('input-on-submit', 'value'),
+    State('local', 'data')])
+def update_output(n_clicks, value, data):
     if n_clicks > 0:
-    #print(value) 
         return "" if value == None else f"The all-important value driving our business decisions is {value+5}"
-
+    else:
+        return f"From previous input {data['random_x']}, the all-important value driving our business decisions is {data['random_x']+5}"
 @app.callback(
     Output('adding-rows-graph', 'figure'),
     Input('adding-rows-table', 'data'))

@@ -79,56 +79,6 @@ def render_page_content(pathname):
     elif pathname == "/page-2":
         return html.P("Oh cool, this is page 2!")
     # If the user tries to reach a different page, return a 404 message
-    return dbc.Jumbotron(
-        [
-            html.H1("404: Not found", className="text-danger"),
-            html.Hr(),
-            html.P(f"The pathname {pathname} was not recognised..."),
-        ]
-    )
-
-# ### Index Page Layout ###
-# index_layout = html.Div(
-#     children=[
-#         dcc.Link(
-#             children='Go to Page 1',
-#             href='/page-1',
-#         ),
-#         html.Br(),
-#         dcc.Link(
-#             children='Go to Page 2',
-#             href='/page-2',
-#         ),
-#     ]
-# )
-
-# ### Assemble all layouts ###
-# app.validation_layout = html.Div(
-#     children = [
-#         page_container,
-#         index_layout,
-#         page_1.layout,
-#         page_2.layout,
-#     ]
-# )
-
-# ### Update Page Container ###
-# @app.callback(
-#     Output(
-#         component_id='page-content',
-#         component_property='children',
-#         ),
-#     [Input(
-#         component_id='url',
-#         component_property='pathname',
-#         )]
-# )
-# def display_page(pathname):
-#     if pathname == '/':
-#         return index_layout
-#     elif pathname == '/page-1':
-#         return page_1.layout
-#     elif pathname == '/page-2':
-#         return page_2.layout
-#     else:
-#         return '404'
+    else:
+        return '404'
+    

@@ -1,0 +1,79 @@
+import dash
+from dash.dependencies import Input, Output, State
+from dash import dcc, html, dash_table
+from dash import html
+import plotly.graph_objects as go
+import random
+import plotly.express as px
+import pandas as pd
+import dash_bootstrap_components as dbc
+
+from app import app
+
+markdown_text = '''
+# Dash Data Visualisation
+# '''
+
+random_x = [random.randint(1,1000) for i in range(20)]
+random_y = [i for i in range(1,21)]
+size = [random.randint(1,50) for i in range(20)]
+color_list = ['x','y','z']
+color = [random.choice(color_list) for i in range(20)]
+data_list = {"random_x":random_x,"random_y":random_y,"size":size,"color":color}
+df = pd.DataFrame(data_list, columns =['random_x','random_y','size','color'])
+
+# Create home page layout to display data when server starts
+layout = html.Div([   
+    dcc.Markdown(children=markdown_text, id="markdown_div", className="header_div"),
+    html.Br(),  
+    dash_table.DataTable(
+        id='adding-rows-table',
+        columns=[{"name": i, "id": i} for i in df.columns],
+        data=df.to_dict('records'),
+        editable=True,
+        row_deletable=True,
+        page_size=5,
+        page_action='none',
+        style_table={'height': '180px', 'overflowY': 'auto'}
+    ),
+    html.Br(), 
+    html.Div(dcc.Input(id='input-on-submit', type='number', min=2, max=1000, step=1)),
+    html.Button('Submit', id='editing-rows-button', className = "submit-button", n_clicks=0),    
+    html.Div(id='container-button-basic', children='Enter a value and press submit', className="report-section"),
+    dcc.Graph(id='adding-rows-graph')
+])
+
+@app.callback(
+    Output('adding-rows-table', 'data'),
+    Input('editing-rows-button', 'n_clicks'),  
+    [State('adding-rows-table', 'data'),
+    State('input-on-submit', 'value')])
+def add_row(n_clicks, rows, value):    
+    if n_clicks > 0:
+        #print({"random_x":value,"random_y":random.randint(1,100),"size":random.randint(1,100),"color":"w"})
+        rows.append({"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])})
+    return rows
+
+@app.callback(
+    Output('container-button-basic', 'children'),
+    Input('editing-rows-button', 'n_clicks'),
+    State('input-on-submit', 'value'))
+def update_output(n_clicks, value):
+    if n_clicks > 0:
+    #print(value)
+    #rows.append({"random_x":random.randint(1,100),"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])}) 
+        return "" if value == None else f"The all-important value driving our business decisions is {value+5}"
+
+@app.callback(
+    Output('adding-rows-graph', 'figure'),
+    Input('adding-rows-table', 'data'))
+    # Input('adding-rows-table', 'columns'))
+def display_output(rows):   
+    fig = px.scatter(rows, 
+        x="random_x", 
+        y="random_y",
+        size="size",
+        color="color",
+        log_x=True, size_max=50)
+
+    return fig

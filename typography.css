@@ -1,0 +1,37 @@
+body {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-size: large;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: rgb(170, 58, 223)
+}
+
+.page-link:hover {
+    color: #f00;
+    background-color: rgb(196, 127, 241);
+  }
+  
+.page-link:active {
+    background-color: rgb(52, 5, 90);
+  }
+
+.page-link{
+    color:white
+}
+
+.nav-pills .nav-link.active {
+    background-color: rgb(65, 4, 94) !important;
+}
+
+.report-section{
+    display: flex;
+    color:orange;
+    font-size: 30px;
+    justify-content: center;
+    /* background-color: plum; */
+}
+
+.submit-button{
+    background-color:rgb(170, 58, 223);
+    color:white
+}

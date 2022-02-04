@@ -35,6 +35,14 @@ markdown_text = '''
 # Dash Data Visualisation
 # '''
 
+random_x = [random.randint(1,1000) for i in range(20)]
+random_y = [i for i in range(1,21)]
+size = [random.randint(1,50) for i in range(20)]
+color_list = ['x','y','z']
+color = [random.choice(color_list) for i in range(20)]
+data_list = {"random_x":random_x,"random_y":random_y,"size":size,"color":color}
+df = pd.DataFrame(data_list, columns =['random_x','random_y','size','color'])
+
 sidebar = html.Div(
     [
         html.H2(html.Img(src=app.get_asset_url('m.png'),height="150px")),

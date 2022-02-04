@@ -2,11 +2,11 @@ import dash
 from dash.dependencies import Input, Output, State
 from dash import dcc, html, dash_table
 from dash import html
-import plotly.graph_objects as go
 import random
 import plotly.express as px
 import pandas as pd
-import dash_bootstrap_components as dbc
+from dash.exceptions import PreventUpdate
+
 
 from app import app
 
@@ -37,6 +37,7 @@ layout = html.Div([
         page_action='none',
         style_table={'height': '180px', 'overflowY': 'auto'}
     ),
+    dcc.Store(id='local', storage_type='local'),
     html.Br(), 
     html.Div(dcc.Input(id='input-on-submit', type='number', min=2, max=1000, step=1)),
     html.Button('Submit', id='editing-rows-button', className = "submit-button", n_clicks=0),    
@@ -76,3 +77,4 @@ def display_output(rows):
         log_x=True, size_max=50)
 
     return fig
+

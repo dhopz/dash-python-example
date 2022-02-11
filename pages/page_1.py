@@ -44,7 +44,7 @@ layout = html.Div([
     dcc.Graph(id='adding-rows-graph')
 ])
 
-
+#Append rows to the table
 @app.callback(
     Output('adding-rows-table', 'data'),
     Input('editing-rows-button', 'n_clicks'),  
@@ -57,6 +57,7 @@ def add_row(n_clicks, rows, value):
         rows.append({"random_x":value,"random_y":random.randint(1,21),"size":random.randint(1,50),"color":random.choice(["a","b","c"])})
     return rows
 
+#Prints statement on to the middle third
 @app.callback(
     Output('container-button-basic', 'children'),
     Input('editing-rows-button', 'n_clicks'),
@@ -71,6 +72,7 @@ def update_output(n_clicks, value, data):
     except TypeError:
         return 'Enter a value and press submit'
 
+#Creates the Graph
 @app.callback(
     Output('adding-rows-graph', 'figure'),
     Input('adding-rows-table', 'data'))
@@ -84,6 +86,7 @@ def display_output(rows):
 
     return fig
 
+#Stores JSON Data in Local Storage
 @app.callback(
     Output('local', 'data'),
     Input('editing-rows-button', 'n_clicks'),
